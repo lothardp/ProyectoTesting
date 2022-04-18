@@ -3,7 +3,7 @@
 require_relative './two_player_controller'
 require_relative './one_player_controller'
 require_relative './board_view'
-require_relative './board'
+require_relative './board_model'
 require_relative './ship'
 require_relative './controller'
 
@@ -23,5 +23,6 @@ if mode == 1
 else
     game_controller = OnePlayerController.new(model_p1, view_p1, model_p2)
 end
-game_controller.put_ships(diff[1])
+# game_controller.put_ships(diff[1])
+view_p1.update(model_p1)
 

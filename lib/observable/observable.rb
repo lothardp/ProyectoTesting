@@ -11,4 +11,3 @@ class Observable
       @observers.each { |observer| observer.update(self) }
     end
 end
-  
