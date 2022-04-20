@@ -5,6 +5,7 @@ class Controller
     end
 
     def welcome
+        # listo para testear
         mode = 0
         while mode != 1 and mode != 2 do
             puts "1) Play against other player \n2) Play against AI"

@@ -7,7 +7,7 @@ require_relative './board_model'
 require_relative './ship'
 require_relative './controller'
 
-DIFFICULTY = Hash[1 => [8, 6], 2 => [12, 9]] # [board_size, number_of_ships]
+DIFFICULTY = Hash[1 => [8, 5], 2 => [12, 7]] # [board_size, number_of_ships]
 
 controller = Controller.new(DIFFICULTY)
 mode, diff = controller.welcome
@@ -23,6 +23,6 @@ if mode == 1
 else
     game_controller = OnePlayerController.new(model_p1, view_p1, model_p2)
 end
-# game_controller.put_ships(diff[1])
-view_p1.update(model_p1)
+game_controller.request_ships(diff[1])
+# view_p1.update(model_p1)
 

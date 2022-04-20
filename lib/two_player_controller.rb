@@ -1,16 +1,17 @@
+require_relative './player_controller'
 
-class TwoPlayerController
-    def initialize(board_model_p1, board_view_p1, board_model_p2, board_view_p2)
+class TwoPlayerController < PlayerController
+    def initialize(board_model_p1, board_view, board_model_p2, board_view_p2)
+        super()
         @model_p1 = board_model_p1
-        @view_p1 = board_view_p1
+        @view_p1 = board_view
         @model_p2 = board_model_p2
         @view_p2 = board_view_p2
     end
 
-    def request_input
-        # pide el input y hace correr el juego
+    def request_ships(n_ships)
+        # empieza los inputs para colocar el barco
     end
 
-    def put_ships(number_of_ships)
-    end
+    
 end

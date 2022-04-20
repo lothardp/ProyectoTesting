@@ -5,7 +5,7 @@ class BoardView < Observer
     
     def initialize
         super()
-        @letters = ["A", "B", "C", "D", "E", "F", "G", "H"]
+        @letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"]
     end
     def update(board_model)
         printBoard(board_model)
