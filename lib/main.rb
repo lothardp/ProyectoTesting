@@ -9,20 +9,21 @@ require_relative './controller'
 
 DIFFICULTY = Hash[1 => [8, 5], 2 => [12, 7]] # [board_size, number_of_ships]
 
-controller = Controller.new(DIFFICULTY)
-mode, diff = controller.welcome
+controller = WellcomeController.new(DIFFICULTY)
+mode, board_size, n_ships = controller.welcome
 
-model_p1 = Board.new(diff[0])
-view_p1 = BoardView.new
-model_p1.addObserver(view_p1)
-model_p2 = Board.new(diff[0])
-if mode == 1
-    view_p2 = BoardView.new
-    model_p2.addObserver(view_p2)
-    game_controller = TwoPlayerController.new(model_p1, view_p1, model_p2, view_p2)
-else
-    game_controller = OnePlayerController.new(model_p1, view_p1, model_p2)
-end
-game_controller.request_ships(diff[1])
-# view_p1.update(model_p1)
+# Se crea el modelo de la board que contiene ambos tableros
+board_model = BoardModel.new(board_size, n_ships)
 
+# Crear la vista
+board_view = BoardView.new
+board_model.addObserver(board_view)
+
+# Crear controlador del juego segun cantidad de jugadores
+game_controller = if mode == 1
+                    TwoPlayerController.new(board_model, board_view)
+                  else
+                    OnePlayerController.new(board_model, board_view)
+                  end
+
+game_controller.start_game
