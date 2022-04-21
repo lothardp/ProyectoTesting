@@ -3,33 +3,31 @@
 require_relative './observable/observable'
 
 class BoardModel < Observable
-  attr_accessor :size, :positions, :n_ships
+  attr_accessor :size, :positions, :n_ships, :board1, :board2
 
   def initialize(size, n_ships)
-    super()
     @size = size
-    @positions = {}
     @n_ships = n_ships
-    build_board
+    @board1 = {}
+    @board2 = {}
+    build_boards
   end
 
-  def build_board
+  def build_boards
     # lista para testear
     (1..@size).each do |row|
-      @positions[row] = {}
+      @board1[row] = {}
       (1..@size).each do |col|
-        @positions[row][col] = ' '
+        @board1[row][col] = ' '
       end
     end
-    # change_board()
+    (1..@size).each do |row|
+      @board2[row] = {}
+      (1..@size).each do |col|
+        @board2[row][col] = ' '
+      end
+    end
   end
-
-  # def change_board()
-  #     @positions[1][8] = "X"
-  #     @positions[4][2] = "X"
-  #     @positions[6][6] = "-"
-  #     @positions[3][4] = "-"
-  # end
 
   def out_of_bounds?(ship)
     (
@@ -52,9 +50,26 @@ class BoardModel < Observable
     false
   end
 
-  def add_ship(ship)
-    pos = ship.positions
-    pos.each { |row, col| @positions[row][col] = 'S' }
-    notifyAll
+  def add_ship(player, ship)
+    board_to_add = player.zero? ? @board1 : @board2
+    ship.positions.each { |row, col| board_to_add[row][col] = 'S' }
+  end
+
+  def shot_from(player, row, col)
+    board_to_edit = player.zero? ? @board2 : @board1
+    actual_symbol = board_to_edit[row][col]
+    if actual_symbol == " "
+        board_to_edit[row][col] = 'O'
+    end
+    if actual_symbol == "S"
+        board_to_edit[row][col] = '!'
+    end
+  end
+
+  def update_sink_by player, ship
+    board_to_edit = player.zero? ? @board2 : @board1
+    ship.positions.each do |row, col| 
+        board_to_edit[row][col] = 'X'
+    end
   end
 end

@@ -5,9 +5,9 @@ require_relative './one_player_controller'
 require_relative './board_view'
 require_relative './board_model'
 require_relative './ship'
-require_relative './controller'
+require_relative './welcome_controller'
 
-DIFFICULTY = Hash[1 => [8, 5], 2 => [12, 7]] # [board_size, number_of_ships]
+DIFFICULTY = Hash[1 => [8, 3], 2 => [12, 7]] # [board_size, number_of_ships]
 
 controller = WellcomeController.new(DIFFICULTY)
 mode, board_size, n_ships = controller.welcome
@@ -16,8 +16,7 @@ mode, board_size, n_ships = controller.welcome
 board_model = BoardModel.new(board_size, n_ships)
 
 # Crear la vista
-board_view = BoardView.new
-board_model.addObserver(board_view)
+board_view = BoardView.new board_model
 
 # Crear controlador del juego segun cantidad de jugadores
 game_controller = if mode == 1
