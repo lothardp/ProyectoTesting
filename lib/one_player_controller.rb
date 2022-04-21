@@ -72,15 +72,11 @@ class OnePlayerController < PlayerController
     row, col = get_row_col
     hit, sunk_ship = handle_shot_from player, row, col # TODO: filtrar shots repetidos e invalidos
     @model.shot_from player, row, col
-    if sunk_ship
-      @model.update_sink_by player, sunk_ship
-    end
+    @model.update_sink_by player, sunk_ship if sunk_ship
     @view.show_board_for player
     if hit
       puts "It's a hit!"
-      if sunk_ship
-        puts 'You sunk a rival ship!'
-      end
+      puts 'You sunk a rival ship!' if sunk_ship
       return if win?
 
       puts 'You can shoot again'
@@ -91,21 +87,17 @@ class OnePlayerController < PlayerController
   end
 
   def play_ai_turn
-    puts "Press enter for AI to play"
+    puts 'Press enter for AI to play'
     $stdin.gets
     row = rand(1..@model.size)
     col = rand(1..@model.size)
     hit, sunk_ship = handle_shot_from 1, row, col # TODO: filtrar shots repetidos e invalidos
     @model.shot_from 1, row, col
-    if sunk_ship
-      @model.update_sink_by 1, sunk_ship
-    end
+    @model.update_sink_by 1, sunk_ship if sunk_ship
     @view.show_board_for 0
     if hit
       puts "It's a hit from the AI!"
-      if sunk_ship
-        puts 'The AI sunk one of your ships!'
-      end
+      puts 'The AI sunk one of your ships!' if sunk_ship
       return if win?
 
       puts 'The AI can shoot again'
@@ -126,7 +118,7 @@ class OnePlayerController < PlayerController
 
       return true, nil
     end
-    return false, nil
+    [false, nil]
   end
 
   def get_row_col
@@ -155,7 +147,7 @@ class OnePlayerController < PlayerController
   end
 
   def finish_game
-    winner_name = @winner == 0 ? "Player 1" : "Player 2"
+    winner_name = @winner.zero? ? 'Player 1' : 'Player 2'
     puts "Game over! The winner is #{winner_name}"
   end
 end

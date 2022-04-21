@@ -24,14 +24,10 @@ class Ship
     positions
   end
 
-  def receive_hit_in row, col
-    if is_in? row, col
-      @hits << [row,col]
-    end
+  def receive_hit_in(row, col)
+    @hits << [row, col] if is_in? row, col
     @positions.each do |p|
-      if !@hits.include? p
-        return
-      end
+      return unless @hits.include? p
     end
     @sunk = true
   end

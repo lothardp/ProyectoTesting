@@ -58,18 +58,14 @@ class BoardModel < Observable
   def shot_from(player, row, col)
     board_to_edit = player.zero? ? @board2 : @board1
     actual_symbol = board_to_edit[row][col]
-    if actual_symbol == " "
-        board_to_edit[row][col] = 'O'
-    end
-    if actual_symbol == "S"
-        board_to_edit[row][col] = '!'
-    end
+    board_to_edit[row][col] = 'O' if actual_symbol == ' '
+    board_to_edit[row][col] = '!' if actual_symbol == 'S'
   end
 
-  def update_sink_by player, ship
+  def update_sink_by(player, ship)
     board_to_edit = player.zero? ? @board2 : @board1
-    ship.positions.each do |row, col| 
-        board_to_edit[row][col] = 'X'
+    ship.positions.each do |row, col|
+      board_to_edit[row][col] = 'X'
     end
   end
 end
