@@ -1,2 +1,5 @@
 Layout/EndOfLine:
    Enabled: False
+
+Style/Documentation:
+   Enabled: False
