@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-require_relative './observable/observable'
-
-class BoardModel < Observable
+class BoardModel
   attr_accessor :size, :positions, :n_ships, :board1, :board2
 
   def initialize(size, n_ships)
@@ -17,13 +15,9 @@ class BoardModel < Observable
     # lista para testear
     (1..@size).each do |row|
       @board1[row] = {}
-      (1..@size).each do |col|
-        @board1[row][col] = ' '
-      end
-    end
-    (1..@size).each do |row|
       @board2[row] = {}
       (1..@size).each do |col|
+        @board1[row][col] = ' '
         @board2[row][col] = ' '
       end
     end

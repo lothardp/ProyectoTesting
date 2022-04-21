@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative './observable/observer'
 require 'io/console'
 
 class BoardView
