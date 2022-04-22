@@ -24,7 +24,7 @@ class PlayerController
 		while (row < 1 or row > board_size)
 				puts "Select a row: "
 				r = $stdin.gets.to_s.chomp.upcase
-				row = @row_to_int[r]
+				@row_to_int[r] == nil ? next : row = @row_to_int[r]
 		end
 		return row
 	end
