@@ -60,4 +60,11 @@ class BoardModel
       board_to_edit[row][col] = 'X'
     end
   end
+
+  def valid_shot(row, col, player)
+    return false if row == 0
+    symbol = player.zero? ? @board2[row][col] : @board1[row][col]
+    return false if symbol == 'O' || symbol == 'X' || symbol == '!'
+    true
+  end
 end
