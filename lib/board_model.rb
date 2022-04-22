@@ -25,7 +25,7 @@ class BoardModel
 
   def out_of_bounds?(ship_size, row, col, is_vertical)
     statement = is_vertical ? row + ship_size - 1 > @size : col + ship_size - 1 > @size
-    return statement || row < 1 || row > @size || col < 1 || col > @size
+    statement || row < 1 || row > @size || col < 1 || col > @size
   end
 
   def ship_collision?(ship_size, row, col, is_vertical, player)
@@ -64,9 +64,11 @@ class BoardModel
   end
 
   def valid_shot(row, col, player)
-    return false if row == 0
+    return false if row.zero?
+
     symbol = player.zero? ? @board2[row][col] : @board1[row][col]
-    return false if symbol == 'O' || symbol == 'X' || symbol == '!'
+    return false if ['O', 'X', '!'].include?(symbol)
+
     true
   end
 end
