@@ -13,6 +13,8 @@ class BoardView
   def print_one_side(player)
     # $stdout.clear_screen
     board_to_print = player.zero? ? @model.board1 : @model.board2
+    player_name = player.zero? ? 'Player 1' : 'Player 2'
+    puts "#{player_name}'s board: "
     print_board board_to_print
   end
 
