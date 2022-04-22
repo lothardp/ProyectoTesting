@@ -106,9 +106,8 @@ class GameController
     end
     @view.show_board_for player
     puts 'Choose your shot'
-		row = request_row(@model.size)
-		col = request_column(@model.size)
-    hit, sunk_ship = handle_shot_from player, row, col # TODO: filtrar shots repetidos e invalidos
+    row, col = shot player
+    hit, sunk_ship = handle_shot_from player, row, col 
     @model.shot_from player, row, col
     @model.update_sink_by player, sunk_ship if sunk_ship
     @view.show_board_for player
@@ -127,9 +126,8 @@ class GameController
 	def play_ai_turn
     puts 'Press enter for AI to play'
     $stdin.gets
-    row = rand(1..@model.size)
-    col = rand(1..@model.size)
-    hit, sunk_ship = handle_shot_from 1, row, col # TODO: filtrar shots repetidos e invalidos
+    row, col = shot 2
+    hit, sunk_ship = handle_shot_from 1, row, col 
     @model.shot_from 1, row, col
     @model.update_sink_by 1, sunk_ship if sunk_ship
     @view.show_board_for 0
@@ -143,6 +141,18 @@ class GameController
     else
       puts "It's a miss"
     end
+  end
+
+  def shot(player)
+    row, col = 0, 0
+    first = true
+    until @model.valid_shot(row, col, player)
+      puts "Invalid shot, already hitted that box" if !first && player != 2
+      row = player == 2 ? rand(1..@model.size) : request_row(@model.size)
+      col = player == 2 ? rand(1..@model.size) : request_column(@model.size)
+      first = false
+    end
+    return [row, col]
   end
 
 	def handle_shot_from(player, row, col)
