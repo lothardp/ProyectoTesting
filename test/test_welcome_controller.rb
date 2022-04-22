@@ -1,10 +1,11 @@
 # frozen_string_literal: true
+
 require_relative 'test_helper'
 require_relative '../lib/welcome_controller'
 require 'test/unit'
 
 class WelcomeControllerNoIO < WelcomeController
-  def set_input_map(input_map)
+  def set_input_map(input_map) # rubocop:disable Naming
     @input_map = input_map
   end
 
@@ -25,12 +26,11 @@ class WelcomeTest < Test::Unit::TestCase
     input_map = Hash[1 => expected_mode, 2 => 1]
     # Stub IO
     @board.set_input_map(input_map)
-    mode, _, _ = @board.welcome
+    mode, = @board.welcome
     assert_true(mode == expected_mode)
   end
 
   # To Do:
   # - Agregar test para función stdin_get_integer
   # - Agregar caso que el modo este incorrecto (loop infinito por el map)
-
 end

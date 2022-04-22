@@ -23,7 +23,7 @@ class WelcomeController
   # funcion que envuelve IO para hacer un stub. recibe una variable
   # para poder mapear el output. por ejemplo, si se busca que en mode
   # retorne 1 y en diff retorne 3, se hace un hash {1: 1, 2: 3}.
-  def stdin_get_integer(var)
+  def stdin_get_integer(_var)
     $stdin.gets.to_i
   end
 end
