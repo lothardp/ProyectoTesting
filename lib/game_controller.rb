@@ -50,7 +50,7 @@ class GameController
 
   def place_ships(player) # rubocop:disable Metrics
     if player == 2 # AI
-      set_ai_ships
+      place_ai_ships
       return
     end
     ship_counter = 0
