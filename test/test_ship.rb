@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require_relative 'test_helper'
 require_relative '../lib/ship'
 require 'test/unit'
@@ -14,18 +15,18 @@ class BoardTest < Test::Unit::TestCase
     @big_ship = ShipClone.new(2, 2, 3, false)
   end
 
-  def test_is_in
+  def test_in
     # Barco chico
-    assert_true(@small_ship.is_in?(1, 1))
+    assert_true(@small_ship.in?(1, 1))
 
-    assert_false(@small_ship.is_in?(2, 2))
+    assert_false(@small_ship.in?(2, 2))
 
     # Barco mediano
-    assert_true(@big_ship.is_in?(2, 3))
+    assert_true(@big_ship.in?(2, 3))
 
-    assert_true(@big_ship.is_in?(2, 4))
+    assert_true(@big_ship.in?(2, 4))
 
-    assert_false(@big_ship.is_in?(3, 3))
+    assert_false(@big_ship.in?(3, 3))
   end
 
   def test_receive_hit_in

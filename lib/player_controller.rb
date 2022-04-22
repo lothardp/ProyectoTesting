@@ -13,28 +13,28 @@ class PlayerController
   def request_orientation
     orientation = 0
     while orientation != 1 && orientation != 2
-        puts "Select orientation\n 1) vertical\n 2) horizonal"
-        orientation = $stdin.gets.to_i
+      puts "Select orientation\n 1) vertical\n 2) horizonal"
+      orientation = $stdin.gets.to_i
     end
-    return orientation
-	end
+    orientation
+  end
 
-	def request_row(board_size)
-		row = 0
-		while (row < 1 or row > board_size)
-				puts "Select a row: "
-				r = $stdin.gets.to_s.chomp.upcase
-				@row_to_int[r] == nil ? next : row = @row_to_int[r]
-		end
-		return row
-	end
+  def request_row(board_size)
+    row = 0
+    while (row < 1) || (row > board_size)
+      puts 'Select a row: '
+      r = $stdin.gets.to_s.chomp.upcase
+      @row_to_int[r].nil? ? next : row = @row_to_int[r]
+    end
+    row
+  end
 
-	def request_column(board_size)
-		col = 0
-		while col < 1 || col > board_size
-				puts "Select a column: "
-				col = $stdin.gets.to_i
-		end
-		return col
-	end
+  def request_column(board_size)
+    col = 0
+    while col < 1 || col > board_size
+      puts 'Select a column: '
+      col = $stdin.gets.to_i
+    end
+    col
+  end
 end

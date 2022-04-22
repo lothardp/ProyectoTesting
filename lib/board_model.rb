@@ -28,17 +28,18 @@ class BoardModel
   end
 
   def ship_collision?(ship_size, row, col, is_vertical, player)
-		board = player.zero? ? @board1 : @board2
-		for i in 0..(ship_size - 1) do
-			return true if is_vertical && board[row + i][col] == "S"
-			return true if !is_vertical && board[row][col + i] == "S"
-		end
+    board = player.zero? ? @board1 : @board2
+    (0..(ship_size - 1)).each do |i|
+      return true if is_vertical && board[row + i][col] == 'S'
+      return true if !is_vertical && board[row][col + i] == 'S'
+    end
     false
   end
 
   def valid_position(ship_size, row, col, is_vertical, player)
-    return false if out_of_bounds?(ship_size, row, col, is_vertical) || 
-			ship_collision?(ship_size, row, col, is_vertical, player)
+    return false if out_of_bounds?(ship_size, row, col, is_vertical) ||
+                    ship_collision?(ship_size, row, col, is_vertical, player)
+
     true
   end
 

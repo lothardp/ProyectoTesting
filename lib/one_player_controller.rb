@@ -12,12 +12,12 @@ class OnePlayerController < PlayerController
   end
 
   def start_game
-    set_ships 0
-    set_ships 2 # AI
+    place_ships 0
+    place_ships 2 # AI
     play
   end
 
-  def set_ships(player)
+  def place_ships(player) # rubocop:disable Metrics
     # TODO: sanitizar estos inputs
     if player == 2 # AI
       set_ai_ships
@@ -28,22 +28,22 @@ class OnePlayerController < PlayerController
     while ship_counter < @model.n_ships
       ship_size = 3 # Podria ser al azar en vola
       puts "\nSet a ship of size #{ship_size}"
-      orientation = request_orientation()
-			row = request_row(@model.size)
-			col = request_column(@model.size)
-			if @model.valid_position(ship_size, row, col, orientation == 1, player)
-				ship = Ship.new(ship_size, row, col, orientation == 1)
-				@model.add_ship player, ship 
-				@p1_ships << ship
-      	ship_counter += 1
-			else
-				puts "Invalid position, try another"
-			end
-			@view.print_one_side player
+      orientation = request_orientation
+      row = request_row(@model.size)
+      col = request_column(@model.size)
+      if @model.valid_position(ship_size, row, col, orientation == 1, player)
+        ship = Ship.new(ship_size, row, col, orientation == 1)
+        @model.add_ship player, ship
+        @p1_ships << ship
+        ship_counter += 1
+      else
+        puts 'Invalid position, try another'
+      end
+      @view.print_one_side player
     end
   end
 
-  def set_ai_ships
+  def place_ai_ships
     ship_counter = 0
     while ship_counter < @model.n_ships
       puts 'AI is setting its Ships'
@@ -51,12 +51,12 @@ class OnePlayerController < PlayerController
       orientation = rand(2)
       row = rand(@model.size)
       col = rand(@model.size)
-			if @model.valid_position(ship_size, row, col, orientation == 1, 2)
-				ship = Ship.new(ship_size, row, col, orientation == 1)
-				@model.add_ship 1, ship
-				@p2_ships << ship
-				ship_counter += 1
-			end
+      next unless @model.valid_position(ship_size, row, col, orientation == 1, 2)
+
+      ship = Ship.new(ship_size, row, col, orientation == 1)
+      @model.add_ship 1, ship
+      @p2_ships << ship
+      ship_counter += 1
     end
   end
 
@@ -68,15 +68,15 @@ class OnePlayerController < PlayerController
     finish_game
   end
 
-  def play_turn(player)
+  def play_turn(player) # rubocop:disable Metrics
     if player == 2
       play_ai_turn
       return
     end
     @view.show_board_for player
     puts 'Choose your shot'
-		row = request_row(@model.size)
-		col = request_column(@model.size)
+    row = request_row(@model.size)
+    col = request_column(@model.size)
     hit, sunk_ship = handle_shot_from player, row, col # TODO: filtrar shots repetidos e invalidos
     @model.shot_from player, row, col
     @model.update_sink_by player, sunk_ship if sunk_ship
@@ -93,7 +93,7 @@ class OnePlayerController < PlayerController
     end
   end
 
-  def play_ai_turn
+  def play_ai_turn # rubocop:disable Metrics
     puts 'Press enter for AI to play'
     $stdin.gets
     row = rand(1..@model.size)
@@ -118,7 +118,7 @@ class OnePlayerController < PlayerController
     # returns (hit, sunk_ship)
     ships_to_check = player.zero? ? @p2_ships : @p1_ships
     ships_to_check.each do |ship|
-      next unless ship.is_in? row, col
+      next unless ship.in? row, col
 
       ship.receive_hit_in row, col
       return true, ship if ship.sunk

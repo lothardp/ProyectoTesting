@@ -3,3 +3,12 @@ Layout/EndOfLine:
 
 Style/Documentation:
    Enabled: False
+
+Metrics/ClassLength:
+   Max: 250
+
+Metrics/MethodLength:
+   Max: 20
+
+AllCops:
+   SuggestExtensions: false
