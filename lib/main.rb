@@ -9,7 +9,7 @@ require_relative './welcome_controller'
 
 DIFFICULTY = Hash[1 => [8, 3], 2 => [12, 7]] # [board_size, number_of_ships]
 
-controller = WellcomeController.new(DIFFICULTY)
+controller = WelcomeController.new(DIFFICULTY)
 mode, board_size, n_ships = controller.welcome
 
 # Se crea el modelo de la board que contiene ambos tableros
