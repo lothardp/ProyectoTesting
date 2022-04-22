@@ -11,13 +11,13 @@ class BoardView
   end
 
   def print_one_side(player)
-    $stdout.clear_screen
+    # $stdout.clear_screen
     board_to_print = player.zero? ? @model.board1 : @model.board2
     print_board board_to_print
   end
 
   def show_board_for(player)
-    $stdout.clear_screen
+    # $stdout.clear_screen
     player_board = player.zero? ? @model.board1 : @model.board2
     rival_board = player.zero? ? @model.board2 : @model.board1
     puts '   Oponent board'

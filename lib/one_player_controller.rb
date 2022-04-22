@@ -28,9 +28,9 @@ class OnePlayerController < PlayerController
     while ship_counter < @model.n_ships
       ship_size = 3 # Podria ser al azar en vola
       puts "\nSet a ship of size #{ship_size}"
-      puts "Select orientation\n 1) vertical\n 2) horizonal"
-      orientation = $stdin.gets.to_i
-      row, col = get_row_col
+      orientation = request_orientation()
+			row = request_row(@model.size)
+			col = request_column(@model.size)
       ship = Ship.new(ship_size, row, col, orientation == 1)
       @model.add_ship player, ship # TODO: revisar que sea valido pornerlo ahi
       @p1_ships << ship
@@ -69,7 +69,8 @@ class OnePlayerController < PlayerController
     end
     @view.show_board_for player
     puts 'Choose your shot'
-    row, col = get_row_col
+		row = request_row(@model.size)
+		col = request_column(@model.size)
     hit, sunk_ship = handle_shot_from player, row, col # TODO: filtrar shots repetidos e invalidos
     @model.shot_from player, row, col
     @model.update_sink_by player, sunk_ship if sunk_ship
@@ -121,14 +122,14 @@ class OnePlayerController < PlayerController
     [false, nil]
   end
 
-  def get_row_col
-    puts 'Select a row: '
-    r = $stdin.gets.to_s.chomp.upcase
-    row = @row_to_int[r]
-    puts 'Select a column: '
-    col = $stdin.gets.to_i
-    [row, col]
-  end
+  # def get_row_col
+  #   puts 'Select a row: '
+  #   r = $stdin.gets.to_s.chomp.upcase
+  #   row = @row_to_int[r]
+  #   puts 'Select a column: '
+  #   col = $stdin.gets.to_i
+  #   [row, col]
+  # end
 
   def win?
     # returns true si alguien ya hundio todos los barcos del otro y setea winner
