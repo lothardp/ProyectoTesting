@@ -1,24 +1,54 @@
 # frozen_string_literal: true
 
-require_relative './player_controller'
+require_relative './ship'
 
-class OnePlayerController < PlayerController
+class GameController
   def initialize(board_model, board_view)
-    super()
-    @model = board_model
+		@model = board_model
     @view = board_view
-    @turn = 0
-    @winner = -1
+		@turn = 0
+		@winner = -1
+    @p1_ships = []
+    @p2_ships = []
+    @row_to_int = { 'A' => 1, 'B' => 2, 'C' => 3, 'D' => 4, 'E' => 5, 'F' => 6,
+                    'G' => 7, 'H' => 8, 'I' => 9, 'J' => 10, 'K' => 11, 'L' => 12 }
   end
 
-  def start_game
+	def request_orientation
+    orientation = 0
+    while orientation != 1 && orientation != 2
+			puts "Select orientation\n 1) vertical\n 2) horizonal"
+			orientation = $stdin.gets.to_i
+    end
+    return orientation
+	end
+
+	def request_row(board_size)
+		row = 0
+		while (row < 1 or row > board_size)
+			puts "Select a row: "
+			r = $stdin.gets.to_s.chomp.upcase
+			@row_to_int[r] == nil ? next : row = @row_to_int[r]
+		end
+		return row
+	end
+
+	def request_column(board_size)
+		col = 0
+		while col < 1 || col > board_size
+			puts "Select a column: "
+			col = $stdin.gets.to_i
+		end
+		return col
+	end
+
+  def start_game(oponent)
     set_ships 0
-    set_ships 2 # AI
-    play
+    set_ships oponent
+    play oponent
   end
 
   def set_ships(player)
-    # TODO: sanitizar estos inputs
     if player == 2 # AI
       set_ai_ships
       return
@@ -33,8 +63,9 @@ class OnePlayerController < PlayerController
 			col = request_column(@model.size)
 			if @model.valid_position(ship_size, row, col, orientation == 1, player)
 				ship = Ship.new(ship_size, row, col, orientation == 1)
-				@model.add_ship player, ship 
-				@p1_ships << ship
+				@model.add_ship player, ship
+				player_ships = player.zero? ? @p1_ships : @p2_ships
+				player_ships << ship
       	ship_counter += 1
 			else
 				puts "Invalid position, try another"
@@ -43,7 +74,7 @@ class OnePlayerController < PlayerController
     end
   end
 
-  def set_ai_ships
+	def set_ai_ships
     ship_counter = 0
     while ship_counter < @model.n_ships
       puts 'AI is setting its Ships'
@@ -60,15 +91,15 @@ class OnePlayerController < PlayerController
     end
   end
 
-  def play
+	def play(oponent)
     until win?
       play_turn @turn
-      @turn = @turn.zero? ? 2 : 0
+      @turn = @turn.zero? ? oponent : 0
     end
     finish_game
   end
 
-  def play_turn(player)
+	def play_turn(player)
     if player == 2
       play_ai_turn
       return
@@ -93,7 +124,7 @@ class OnePlayerController < PlayerController
     end
   end
 
-  def play_ai_turn
+	def play_ai_turn
     puts 'Press enter for AI to play'
     $stdin.gets
     row = rand(1..@model.size)
@@ -114,7 +145,7 @@ class OnePlayerController < PlayerController
     end
   end
 
-  def handle_shot_from(player, row, col)
+	def handle_shot_from(player, row, col)
     # returns (hit, sunk_ship)
     ships_to_check = player.zero? ? @p2_ships : @p1_ships
     ships_to_check.each do |ship|
@@ -128,7 +159,7 @@ class OnePlayerController < PlayerController
     [false, nil]
   end
 
-  def win?
+	def win?
     # returns true si alguien ya hundio todos los barcos del otro y setea winner
     @winner = 1
     @p1_ships.each do |ship|
@@ -148,4 +179,6 @@ class OnePlayerController < PlayerController
     winner_name = @winner.zero? ? 'Player 1' : 'Player 2'
     puts "Game over! The winner is #{winner_name}"
   end
+
+  
 end
