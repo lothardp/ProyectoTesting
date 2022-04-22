@@ -37,9 +37,28 @@ class BoardModel
     false
   end
 
+  def next_to_ship?(ship_size, row, col, is_vertical, player)
+    board = player.zero? ? @board1 : @board2
+    if row - 1 > 0 && col - 1 > 0 && row + 1 < @size && col + 1 < @size
+      return true if board[row - 1][col - 1] == 'S'
+      return true if is_vertical && (board[row - 1][col] == 'S' || board[row - 1][col + 1] == 'S' ||
+        board[row + ship_size][col - 1] == 'S' || board[row + ship_size][col] == 'S' || board[row + ship_size][col + 1] == 'S')
+      return true if !is_vertical && (board[row][col - 1] == 'S' || board[row + 1][col - 1] == 'S' ||
+        board[row - 1][col + ship_size] == 'S' || board[row][col + ship_size] == 'S' || board[row + 1][col + ship_size] == 'S')
+      for i in 0..(ship_size - 1) do
+        return true if is_vertical && (board[row + i][col - 1] == 'S' || board[row + i][col + 1] == 'S')
+        return true if !is_vertical && (board[row - 1][col + i] == 'S' || board[row + 1][col + i] == 'S')
+      end
+    elsif row < 2
+      return true if is_vertical && col ()
+    end
+    false
+  end
+
   def valid_position(ship_size, row, col, is_vertical, player)
     return false if out_of_bounds?(ship_size, row, col, is_vertical) || 
-			ship_collision?(ship_size, row, col, is_vertical, player)
+			ship_collision?(ship_size, row, col, is_vertical, player) ||
+      next_to_ship?(ship_size, row, col, is_vertical, player)
     true
   end
 
@@ -59,6 +78,9 @@ class BoardModel
     board_to_edit = player.zero? ? @board2 : @board1
     ship.positions.each do |row, col|
       board_to_edit[row][col] = 'X'
+    end
+    ship.neighbors.each do |row, col|
+      board_to_edit[row][col] = 'O'
     end
   end
 

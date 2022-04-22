@@ -8,6 +8,7 @@ class Ship
     @is_vertical = is_vertical
     @bow = { 'row' => row, 'col' => col } # proa -> parte delantera
     @positions = set_positions
+    @neighbors = set_neighbors
     @sunk = false
     @hits = []
   end
@@ -38,5 +39,22 @@ class Ship
     else
       false
     end
+  end
+
+  def set_neighbors
+    neighbors = []
+    row, col = @positions[0]
+    for i in -1..1 
+      neighbors << [row + i, col - 1]
+    end
+    row, col = @positions[@size - 1]
+    for i in -1..1
+      neighbors << [row + i, col + 1]
+    end
+    @positions.each do |row, col|
+      neighbors << [row - 1, col]
+      neighbors << [row + 1, col]
+    end
+    neighbors
   end
 end

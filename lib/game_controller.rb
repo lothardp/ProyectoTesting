@@ -80,8 +80,8 @@ class GameController
       puts 'AI is setting its Ships'
       ship_size = 3 # Podria ser al azar en vola
       orientation = rand(2)
-      row = rand(@model.size)
-      col = rand(@model.size)
+      row = rand(1..@model.size)
+      col = rand(1..@model.size)
 			if @model.valid_position(ship_size, row, col, orientation == 1, 2)
 				ship = Ship.new(ship_size, row, col, orientation == 1)
 				@model.add_ship 1, ship
