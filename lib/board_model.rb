@@ -23,25 +23,23 @@ class BoardModel
     end
   end
 
-  def out_of_bounds?(ship)
-    (
-        ship.bow['row'] < 1 || ship.bow['row'] > @size ||
-        ship.bow['col'] < 1 || ship.bow['col'] > @size ||
-        ship.stern['row'] > @size || ship.stern['col'] > @size
-      )
+  def out_of_bounds?(ship_size, row, col, is_vertical)
+    is_vertical ? row + ship_size - 1 > @size : col + ship_size - 1 > @size
   end
 
-  def ship_collision(ship)
-    ship.positions.each do |row, col| # [[1,2], [1,3], [1,4]]
-      return true if @positions[row][col] == 'S'
-    end
+  def ship_collision?(ship_size, row, col, is_vertical, player)
+		board = player.zero? ? @board1 : @board2
+		for i in 0..(ship_size - 1) do
+			return true if is_vertical && board[row + i][col] == "S"
+			return true if !is_vertical && board[row][col + i] == "S"
+		end
     false
   end
 
-  def invalid_position(ship)
-    return true if out_of_bounds?(ship) || ship_collision?(ship)
-
-    false
+  def valid_position(ship_size, row, col, is_vertical, player)
+    return false if out_of_bounds?(ship_size, row, col, is_vertical) || 
+			ship_collision?(ship_size, row, col, is_vertical, player)
+    true
   end
 
   def add_ship(player, ship)

@@ -31,11 +31,15 @@ class OnePlayerController < PlayerController
       orientation = request_orientation()
 			row = request_row(@model.size)
 			col = request_column(@model.size)
-      ship = Ship.new(ship_size, row, col, orientation == 1)
-      @model.add_ship player, ship # TODO: revisar que sea valido pornerlo ahi
-      @p1_ships << ship
-      ship_counter += 1
-      @view.print_one_side player
+			if @model.valid_position(ship_size, row, col, orientation == 1, player)
+				ship = Ship.new(ship_size, row, col, orientation == 1)
+				@model.add_ship player, ship 
+				@p1_ships << ship
+      	ship_counter += 1
+			else
+				puts "Invalid position, try another"
+			end
+			@view.print_one_side player
     end
   end
 
@@ -47,10 +51,12 @@ class OnePlayerController < PlayerController
       orientation = rand(2)
       row = rand(@model.size)
       col = rand(@model.size)
-      ship = Ship.new(ship_size, row, col, orientation == 1)
-      @model.add_ship 1, ship # TODO: revisar que sea valido pornerlo ahi
-      @p2_ships << ship
-      ship_counter += 1
+			if @model.valid_position(ship_size, row, col, orientation == 1, 2)
+				ship = Ship.new(ship_size, row, col, orientation == 1)
+				@model.add_ship 1, ship
+				@p2_ships << ship
+				ship_counter += 1
+			end
     end
   end
 
@@ -121,15 +127,6 @@ class OnePlayerController < PlayerController
     end
     [false, nil]
   end
-
-  # def get_row_col
-  #   puts 'Select a row: '
-  #   r = $stdin.gets.to_s.chomp.upcase
-  #   row = @row_to_int[r]
-  #   puts 'Select a column: '
-  #   col = $stdin.gets.to_i
-  #   [row, col]
-  # end
 
   def win?
     # returns true si alguien ya hundio todos los barcos del otro y setea winner
