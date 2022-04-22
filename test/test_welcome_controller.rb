@@ -9,7 +9,6 @@ class WelcomeControllerNoIO < WelcomeController
   end
 
   def stdin_get_integer(var)
-    puts 'input', @input_map[var]
     @input_map[var]
   end
 end
