@@ -28,14 +28,18 @@ class OnePlayerController < PlayerController
     while ship_counter < @model.n_ships
       ship_size = 3 # Podria ser al azar en vola
       puts "\nSet a ship of size #{ship_size}"
-      puts "Select orientation\n 1) vertical\n 2) horizonal"
-      orientation = $stdin.gets.to_i
-      row, col = get_row_col
-      ship = Ship.new(ship_size, row, col, orientation == 1)
-      @model.add_ship player, ship # TODO: revisar que sea valido pornerlo ahi
-      @p1_ships << ship
-      ship_counter += 1
-      @view.print_one_side player
+      orientation = request_orientation()
+			row = request_row(@model.size)
+			col = request_column(@model.size)
+			if @model.valid_position(ship_size, row, col, orientation == 1, player)
+				ship = Ship.new(ship_size, row, col, orientation == 1)
+				@model.add_ship player, ship 
+				@p1_ships << ship
+      	ship_counter += 1
+			else
+				puts "Invalid position, try another"
+			end
+			@view.print_one_side player
     end
   end
 
@@ -47,10 +51,12 @@ class OnePlayerController < PlayerController
       orientation = rand(2)
       row = rand(@model.size)
       col = rand(@model.size)
-      ship = Ship.new(ship_size, row, col, orientation == 1)
-      @model.add_ship 1, ship # TODO: revisar que sea valido pornerlo ahi
-      @p2_ships << ship
-      ship_counter += 1
+			if @model.valid_position(ship_size, row, col, orientation == 1, 2)
+				ship = Ship.new(ship_size, row, col, orientation == 1)
+				@model.add_ship 1, ship
+				@p2_ships << ship
+				ship_counter += 1
+			end
     end
   end
 
@@ -69,7 +75,8 @@ class OnePlayerController < PlayerController
     end
     @view.show_board_for player
     puts 'Choose your shot'
-    row, col = get_row_col
+		row = request_row(@model.size)
+		col = request_column(@model.size)
     hit, sunk_ship = handle_shot_from player, row, col # TODO: filtrar shots repetidos e invalidos
     @model.shot_from player, row, col
     @model.update_sink_by player, sunk_ship if sunk_ship
@@ -119,15 +126,6 @@ class OnePlayerController < PlayerController
       return true, nil
     end
     [false, nil]
-  end
-
-  def get_row_col
-    puts 'Select a row: '
-    r = $stdin.gets.to_s.chomp.upcase
-    row = @row_to_int[r]
-    puts 'Select a column: '
-    col = $stdin.gets.to_i
-    [row, col]
   end
 
   def win?
