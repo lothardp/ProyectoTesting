@@ -19,8 +19,6 @@ class WelcomeTest < Test::Unit::TestCase
     @board = WelcomeControllerNoIO.new(Hash[1 => [8, 3], 2 => [12, 7]])
   end
 
-  def test_io
-
   def test_correct_mode
     # Stub for stdin
     expected_mode = 1
