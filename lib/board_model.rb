@@ -24,7 +24,8 @@ class BoardModel
   end
 
   def out_of_bounds?(ship_size, row, col, is_vertical)
-    is_vertical ? row + ship_size - 1 > @size : col + ship_size - 1 > @size
+    statement = is_vertical ? row + ship_size - 1 > @size : col + ship_size - 1 > @size
+    return statement || row < 1 || row > @size || col < 1 || col > @size
   end
 
   def ship_collision?(ship_size, row, col, is_vertical, player)
