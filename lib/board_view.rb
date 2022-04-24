@@ -28,7 +28,7 @@ class BoardView
     print_board player_board
   end
 
-  def print_board(board, hide_ships: false) # rubocop:disable Metrics
+  def print_board(board, hide_ships = false) # rubocop:disable Metrics,Style/OptionalBooleanParameter
     len = board.length
     print '   '
     (1..len).each do |number|
