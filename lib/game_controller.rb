@@ -3,13 +3,13 @@
 require_relative './ship'
 
 class GameController
+  attr_accessor :model
+
   def initialize(board_model, board_view)
     @model = board_model
     @view = board_view
     @turn = 0
     @winner = -1
-    @p1_ships = []
-    @p2_ships = []
     @row_to_int = { 'A' => 1, 'B' => 2, 'C' => 3, 'D' => 4, 'E' => 5, 'F' => 6,
                     'G' => 7, 'H' => 8, 'I' => 9, 'J' => 10, 'K' => 11, 'L' => 12 }
   end
@@ -64,8 +64,6 @@ class GameController
       if @model.valid_position(ship_size, row, col, orientation == 1, player)
         ship = Ship.new(ship_size, row, col, orientation == 1)
         @model.add_ship player, ship
-        player_ships = player.zero? ? @p1_ships : @p2_ships
-        player_ships << ship
         ship_counter += 1
       else
         puts 'Invalid position, try another'
@@ -85,8 +83,7 @@ class GameController
       next unless @model.valid_position(ship_size, row, col, orientation == 1, 2)
 
       ship = Ship.new(ship_size, row, col, orientation == 1)
-      @model.add_ship 1, ship
-      @p2_ships << ship
+      @model.add_ship 2, ship
       ship_counter += 1
     end
   end
@@ -158,7 +155,7 @@ class GameController
 
   def handle_shot_from(player, row, col)
     # returns (hit, sunk_ship)
-    ships_to_check = player.zero? ? @p2_ships : @p1_ships
+    ships_to_check = player.zero? ? @model.p2_ships : @model.p1_ships
     ships_to_check.each do |ship|
       next unless ship.in? row, col
 
@@ -173,12 +170,12 @@ class GameController
   def win?
     # returns true si alguien ya hundio todos los barcos del otro y setea winner
     @winner = 1
-    @p1_ships.each do |ship|
+    @model.p1_ships.each do |ship|
       @winner = 0 unless ship.sunk
     end
     return true if @winner == 1
 
-    @p2_ships.each do |ship|
+    @model.p2_ships.each do |ship|
       @winner = -1 unless ship.sunk
     end
     return true if @winner.zero?
