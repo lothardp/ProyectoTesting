@@ -12,3 +12,6 @@ Metrics/MethodLength:
 
 AllCops:
    SuggestExtensions: false
+
+Metrics/AbcSize:
+   Max: 20

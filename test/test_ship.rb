@@ -3,6 +3,7 @@
 require_relative 'test_helper'
 require_relative '../lib/ship'
 require 'test/unit'
+require 'set'
 
 # Se agrega accessor para hits
 class ShipClone < Ship
@@ -40,5 +41,30 @@ class BoardTest < Test::Unit::TestCase
     # miss
     @small_ship.receive_hit_in(2, 2)
     assert_true(@small_ship.hits == [[1, 1]])
+  end
+
+  def test_vertical_neighbors
+    neighbors = @small_ship.vertical_neighbors
+    actual_neighbors = [[0, 0], [1, 0], [2, 0], [0, 1], [2, 1], [0, 2], [1, 2], [2, 2]]
+    assert_true(neighbors.to_set == actual_neighbors.to_set)
+  end
+
+  def test_horizontal_neighbors
+    neighbors = @big_ship.horizontal_neighbors
+    actual_neighbors = [[1, 2], [2, 2], [3, 2], [1, 3], [3, 3], [1, 4], [3, 4], [1, 5], [2, 5], [3, 5]]
+    assert_true(neighbors.to_set == actual_neighbors.to_set)
+  end
+
+  def test_clean_neighbors
+    vertical_neighbors = [[0, 0], [1, 0], [2, 0], [0, 1], [2, 1], [0, 2], [1, 2], [2, 2]]
+    neighbors = @small_ship.clean_neighbors vertical_neighbors, 8
+    actual_neighbors = [[1, 2], [2, 1], [2, 2]]
+    assert_true(neighbors.to_set == actual_neighbors.to_set)
+  end
+
+  def test_get_neighbors
+    neighbors = @small_ship.get_neighbors 8
+    actual_neighbors = [[1, 2], [2, 1], [2, 2]]
+    assert_true(neighbors.to_set == actual_neighbors.to_set)
   end
 end
