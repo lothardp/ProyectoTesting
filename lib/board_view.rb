@@ -15,7 +15,7 @@ class BoardView
     board_to_print = player.zero? ? @model.board1 : @model.board2
     player_name = player.zero? ? 'Player 1' : 'Player 2'
     puts "#{player_name}'s board: "
-    print_board board_to_print
+    print_board board_to_print, false
   end
 
   def show_board_for(player)
@@ -25,10 +25,10 @@ class BoardView
     puts '   Oponent board'
     print_board rival_board, true
     puts '   Your board'
-    print_board player_board
+    print_board player_board, false
   end
 
-  def print_board(board, hide_ships = false) # rubocop:disable Metrics,Style/OptionalBooleanParameter
+  def print_board(board, hide_ships = false) # rubocop:disable Style/OptionalBooleanParameter
     len = board.length
     print '   '
     (1..len).each do |number|

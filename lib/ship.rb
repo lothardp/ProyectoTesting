@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Ship
-  attr_accessor :size, :is_vertical, :positions, :sunk
+  attr_accessor :size, :is_vertical, :positions, :sunk, :neighbors
 
   def initialize(size, row, col, is_vertical)
     @size = size
@@ -38,5 +38,40 @@ class Ship
     else
       false
     end
+  end
+
+  def get_neighbors(board_size)
+    neighbors = @is_vertical ? vertical_neighbors : horizontal_neighbors
+    clean_neighbors neighbors, board_size
+  end
+
+  def vertical_neighbors
+    neighbors = []
+    (-1..@size).each do |i|
+      neighbors << [@bow['row'] + i, @bow['col'] - 1]
+      neighbors << [@bow['row'] + i, @bow['col'] + 1]
+    end
+    neighbors << [@bow['row'] - 1, @bow['col']]
+    neighbors << [@bow['row'] + @size, @bow['col']]
+    neighbors
+  end
+
+  def horizontal_neighbors
+    neighbors = []
+    (-1..@size).each do |i|
+      neighbors << [@bow['row'] - 1, @bow['col'] + i]
+      neighbors << [@bow['row'] + 1, @bow['col'] + i]
+    end
+    neighbors << [@bow['row'], @bow['col'] - 1]
+    neighbors << [@bow['row'], @bow['col'] + @size]
+    neighbors
+  end
+
+  def clean_neighbors(neighbors, board_size)
+    new_neighbors = []
+    neighbors.each do |row, col|
+      new_neighbors.push([row, col]) if row.positive? && row <= board_size && col.positive? && col <= board_size
+    end
+    new_neighbors
   end
 end

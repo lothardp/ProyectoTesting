@@ -39,9 +39,19 @@ class BoardModel
     false
   end
 
+  def next_to_ship?(ship_size, row, col, is_vertical, player)
+    board = player.zero? ? @board1 : @board2
+    neighbors = neighbor_boxes ship_size, row, col, is_vertical
+    neighbors.each do |r, c|
+      return true if board[r][c] == 'S'
+    end
+    false
+  end
+
   def valid_position(ship_size, row, col, is_vertical, player)
     return false if out_of_bounds?(ship_size, row, col, is_vertical) ||
-                    ship_collision?(ship_size, row, col, is_vertical, player)
+                    ship_collision?(ship_size, row, col, is_vertical, player) ||
+                    next_to_ship?(ship_size, row, col, is_vertical, player)
 
     true
   end
@@ -65,6 +75,10 @@ class BoardModel
     ship.positions.each do |row, col|
       board_to_edit[row][col] = 'X'
     end
+    neighbors = ship.get_neighbors @size
+    neighbors.each do |row, col|
+      board_to_edit[row][col] = 'O'
+    end
   end
 
   def valid_shot(row, col, player)
@@ -74,5 +88,36 @@ class BoardModel
     return false if ['O', 'X', '!'].include?(symbol)
 
     true
+  end
+
+  def neighbor_boxes(ship_size, row, col, is_vertical)
+    real_neighbors = []
+    neighbors = is_vertical ? vertical_neighbors(ship_size, row, col) : horizontal_neighbors(ship_size, row, col)
+    neighbors.each do |r, c|
+      real_neighbors << [r, c] if r.positive? && r <= @size && c.positive? && c <= @size
+    end
+    real_neighbors
+  end
+
+  def vertical_neighbors(ship_size, row, col)
+    neighbors = []
+    (-1..ship_size).each do |i|
+      neighbors << [row + i, col - 1]
+      neighbors << [row + i, col + 1]
+    end
+    neighbors << [row - 1, col]
+    neighbors << [row + ship_size, col]
+    neighbors
+  end
+
+  def horizontal_neighbors(ship_size, row, col)
+    neighbors = []
+    (-1..ship_size).each do |i|
+      neighbors << [row - 1, col + i]
+      neighbors << [row + 1, col + i]
+    end
+    neighbors << [row, col - 1]
+    neighbors << [row, col + ship_size]
+    neighbors
   end
 end
