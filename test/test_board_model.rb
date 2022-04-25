@@ -2,7 +2,7 @@
 
 require_relative 'test_helper'
 require_relative '../lib/board_model'
-require_relative '../lib/ship'
+require_relative '../test/test_ship'
 require 'test/unit'
 
 class BoardModelTest < Test::Unit::TestCase
@@ -28,13 +28,19 @@ class BoardModelTest < Test::Unit::TestCase
   end
 
   def test_add_ship
-    ship = Ship.new(3, 2, 2, true)
+    ship = ShipClone.new(3, 2, 2, true)
     assert_equal([[2, 2], [3, 2], [4, 2]], @board_chico.add_ship(1, ship))
+
+    ship = ShipClone.new(3, 2, 2, false)
+    assert_equal([[2, 2], [2, 3], [2, 4]], @board_chico.add_ship(1, ship))
   end
 
   def test_update_sink_by
-    ship = Ship.new(3, 2, 2, true)
+    ship = ShipClone.new(3, 2, 2, true)
     assert_equal([[2, 2], [3, 2], [4, 2]], @board_chico.update_sink_by(1, ship))
+
+    ship = ShipClone.new(3, 2, 2, false)
+    assert_equal([[2, 2], [2, 3], [2, 4]], @board_chico.update_sink_by(1, ship))
   end
 
   def test_valid_shot
