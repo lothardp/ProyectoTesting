@@ -199,18 +199,15 @@ class GameControllerTest < Test::Unit::TestCase
 
     # hit
     # @no_io_controller.play_turn 0, 3, 3
-    # assert_equal(@no_io_controller.model.p2_ships[0].hits.to_set, @no_io_controller.model.p2_ships[0].positions.to_set)
+    # assert_equal(@no_io_controller.model.p2_ships[0].hits.to_set,
+    # @no_io_controller.model.p2_ships[0].positions.to_set)
   end
 
-  def test_play_ai_turn
-  end
+  def test_play_ai_turn; end
 
-  def test_finish_game
-  end
+  def test_finish_game; end
 
-  def test_play
-  end
+  def test_play; end
 
-  def test_start_game
-  end
+  def test_start_game; end
 end
