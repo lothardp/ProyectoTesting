@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 
 class BoardModel
-  attr_accessor :size, :positions, :n_ships, :board1, :board2
+  attr_accessor :size, :positions, :n_ships, :board1, :board2, :p1_ships, :p2_ships
 
   def initialize(size, n_ships)
     @size = size
     @n_ships = n_ships
     @board1 = {}
     @board2 = {}
+    @p1_ships = []
+    @p2_ships = []
     build_boards
   end
 
@@ -56,6 +58,8 @@ class BoardModel
 
   def add_ship(player, ship)
     board_to_add = player.zero? ? @board1 : @board2
+    ships_to_add = player.zero? ? @p1_ships : @p2_ships
+    ships_to_add << ship
     ship.positions.each { |row, col| board_to_add[row][col] = 'S' }
   end
 
