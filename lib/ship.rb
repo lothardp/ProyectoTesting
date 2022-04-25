@@ -41,43 +41,36 @@ class Ship
   end
 
   def get_neighbors(board_size)
-    if @is_vertical
-      neighbors = vertical_neighbors
-    else
-      neighbors = horizontal_neighbors
-    end
-    new_neighbors = clean_neighbors(neighbors, board_size)
-    new_neighbors
+    neighbors = @is_vertical ? vertical_neighbors : horizontal_neighbors
+    clean_neighbors neighbors, board_size
   end
 
   def vertical_neighbors
     neighbors = []
     (-1..@size).each do |i|
-      neighbors.push([@bow['row'] + i, @bow['col'] - 1])
-      neighbors.push([@bow['row'] + i, @bow['col'] + 1])
+      neighbors << [@bow['row'] + i, @bow['col'] - 1]
+      neighbors << [@bow['row'] + i, @bow['col'] + 1]
     end
-    neighbors.push([@bow['row'] - 1, @bow['col']])
-    neighbors.push([@bow['row'] + @size, @bow['col']])
+    neighbors << [@bow['row'] - 1, @bow['col']]
+    neighbors << [@bow['row'] + @size, @bow['col']]
     neighbors
   end
 
   def horizontal_neighbors
     neighbors = []
     (-1..@size).each do |i|
-      neighbors.push([@bow['row'] - 1, @bow['col'] + i])
-      neighbors.push([@bow['row'] + 1, @bow['col'] + i])
+      neighbors << [@bow['row'] - 1, @bow['col'] + i]
+      neighbors << [@bow['row'] + 1, @bow['col'] + i]
     end
-    neighbors.push([@bow['row'], @bow['col'] - 1])
-    neighbors.push([@bow['row'], @bow['col'] + @size])
+    neighbors << [@bow['row'], @bow['col'] - 1]
+    neighbors << [@bow['row'], @bow['col'] + @size]
     neighbors
   end
 
   def clean_neighbors(neighbors, board_size)
     new_neighbors = []
     neighbors.each do |row, col|
-      if row > 0 && row <= board_size && col > 0 && col <= board_size
-        new_neighbors.push([row, col]) 
-      end
+      new_neighbors.push([row, col]) if row.positive? && row <= board_size && col.positive? && col <= board_size
     end
     new_neighbors
   end

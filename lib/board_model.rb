@@ -40,8 +40,8 @@ class BoardModel
   def next_to_ship?(ship_size, row, col, is_vertical, player)
     board = player.zero? ? @board1 : @board2
     neighbors = neighbor_boxes ship_size, row, col, is_vertical
-    neighbors.each do |row, col|
-      return true if board[row][col] == 'S'
+    neighbors.each do |r, c|
+      return true if board[r][c] == 'S'
     end
     false
   end
@@ -79,34 +79,41 @@ class BoardModel
 
   def valid_shot(row, col, player)
     return false if row.zero?
+
     symbol = player.zero? ? @board2[row][col] : @board1[row][col]
     return false if ['O', 'X', '!'].include?(symbol)
+
     true
   end
 
   def neighbor_boxes(ship_size, row, col, is_vertical)
-    positions = []
+    real_neighbors = []
+    neighbors = is_vertical ? vertical_neighbors(ship_size, row, col) : horizontal_neighbors(ship_size, row, col)
+    neighbors.each do |r, c|
+      real_neighbors << [r, c] if r.positive? && r <= @size && c.positive? && c <= @size
+    end
+    real_neighbors
+  end
+
+  def vertical_neighbors(ship_size, row, col)
     neighbors = []
-    if is_vertical
-      (-1..ship_size).each do |i|
-        positions << [row + i, col - 1]
-        positions << [row + i, col + 1]
-      end
-      positions << [row - 1, col]
-      positions << [row + ship_size, col]
-    else
-      (-1..ship_size).each do |i|
-        positions << [row - 1, col + i]
-        positions << [row + 1, col + i]
-      end
-      positions << [row, col - 1]
-      positions << [row, col + ship_size]
+    (-1..ship_size).each do |i|
+      neighbors << [row + i, col - 1]
+      neighbors << [row + i, col + 1]
     end
-    positions.each do |r, c|
-      if (r > 0 && r <= @size && c > 0 && c <= @size)
-        neighbors << [r, c] 
-      end
+    neighbors << [row - 1, col]
+    neighbors << [row + ship_size, col]
+    neighbors
+  end
+
+  def horizontal_neighbors(ship_size, row, col)
+    neighbors = []
+    (-1..ship_size).each do |i|
+      neighbors << [row - 1, col + i]
+      neighbors << [row + 1, col + i]
     end
+    neighbors << [row, col - 1]
+    neighbors << [row, col + ship_size]
     neighbors
   end
 end
