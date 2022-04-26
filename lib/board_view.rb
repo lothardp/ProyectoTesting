@@ -13,75 +13,75 @@ class BoardView
   end
 
   def ask_for_orientation
-    print "Select orientation\n 1) vertical\n 2) horizonal"
+    puts "Select orientation\n 1) vertical\n 2) horizonal"
     $stdin.gets.to_i
   end
 
   def ask_for_row
-    print 'Select a row: '
+    puts 'Select a row: '
     $stdin.gets.to_s.chomp.upcase
   end
 
   def ask_for_column
-    print 'Select a column: '
+    puts 'Select a column: '
     $stdin.gets.to_i
   end
 
   def show_set_ship_of_size(ship_size)
-    print "\nSet a ship of size #{ship_size}"
+    puts "\nSet a ship of size #{ship_size}"
   end
 
   def show_invalid_ship_position
-    print 'Invalid position, try another'
+    puts 'Invalid position, try another'
   end
 
   def show_ai_setting_ships
-    print 'AI is setting its Ships'
+    puts 'AI is setting its Ships'
   end
 
   def show_invalid_shot
-    print 'Invalid shot, already hit that box'
+    puts 'Invalid shot, already hit that box'
   end
 
   def show_choose_your_shot
-    print 'Choose your shot'
+    puts 'Choose your shot'
   end
 
   def show_hit
-    print "It's a hit!"
+    puts "It's a hit!"
   end
 
   def show_sink
-    print 'You sunk a rival ship!'
+    puts 'You sunk a rival ship!'
   end
 
   def show_shoot_again
-    print 'You can shoot again'
+    puts 'You can shoot again'
   end
 
   def show_miss
-    print "It's a miss"
+    puts "It's a miss"
   end
 
   def ask_for_press_for_ai_play
-    print 'Press enter for AI to play'
+    puts 'Press enter for AI to play'
     $stdin.gets
   end
 
   def show_ai_hit
-    print "It's a hit from the AI!"
+    puts "It's a hit from the AI!"
   end
 
   def show_ai_sink
-    print 'The AI sunk one of your ships!'
+    puts 'The AI sunk one of your ships!'
   end
 
   def show_ai_shoot_again
-    print 'The AI can shoot again'
+    puts 'The AI can shoot again'
   end
 
   def show_game_over(winner_name)
-    print "Game over! The winner is #{winner_name}"
+    puts "Game over! The winner is #{winner_name}"
   end
 
   def print_one_side(player)
