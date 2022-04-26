@@ -179,7 +179,7 @@ class GameControllerTest < Test::Unit::TestCase
     assert_false(winner)
   end
 
-  def test_winners
+  def test_winners # rubocop:disable Metrics
     ship_p1 = ShipClone.new(1, 4, 4, true)
     ship_p2 = ShipClone.new(1, 6, 6, false)
     @model.add_ship(0, ship_p1)

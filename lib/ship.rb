@@ -46,7 +46,7 @@ class Ship
     clean_neighbors neighbors, board_size
   end
 
-  def vertical_neighbors
+  def vertical_neighbors # rubocop:disable Metrics
     neighbors = []
     (-1..@size).each do |i|
       neighbors << [@bow['row'] + i, @bow['col'] - 1]
@@ -57,7 +57,7 @@ class Ship
     neighbors
   end
 
-  def horizontal_neighbors
+  def horizontal_neighbors # rubocop:disable Metrics
     neighbors = []
     (-1..@size).each do |i|
       neighbors << [@bow['row'] - 1, @bow['col'] + i]
