@@ -7,6 +7,24 @@ require_relative '../lib/game_controller'
 require_relative 'test_ship'
 require 'test/unit'
 require 'set'
+require 'stringio'
+
+class BoardViewNoIO < BoardView
+  attr_accessor :inputs
+
+  def ask_for_orientation
+    # puts "Select orientation\n 1) vertical\n 2) horizonal"
+    @inputs.pop.to_i
+  end
+
+  def ask_for_row
+    @inputs.pop.to_s.chomp.upcase
+  end
+
+  def ask_for_column
+    @inputs.pop.to_i
+  end
+end
 
 class GameControllerNoIO < GameController
   def request_orientation
@@ -201,6 +219,39 @@ class GameControllerTest < Test::Unit::TestCase
     # @no_io_controller.play_turn 0, 3, 3
     # assert_equal(@no_io_controller.model.p2_ships[0].hits.to_set,
     # @no_io_controller.model.p2_ships[0].positions.to_set)
+  end
+
+  def test_request_orientation
+    view = BoardViewNoIO.new @model
+    controller = GameController.new(@model, view)
+    view.inputs = ["0", "1", "dasfa", "lol ", "2", "hoasdlfasd"]
+
+    first = controller.request_orientation
+    second = controller.request_orientation
+    assert_equal(first, 2)
+    assert_equal(second, 1)
+  end
+
+  def test_request_row
+    view = BoardViewNoIO.new @model
+    controller = GameController.new(@model, view)
+    view.inputs = ["b", "1", "z", "a", "2", "hoasdlfasd"]
+
+    first = controller.request_row @model.size
+    second = controller.request_row @model.size
+    assert_equal(first, 1)
+    assert_equal(second, 2)
+  end
+
+  def test_request_column
+    view = BoardViewNoIO.new @model
+    controller = GameController.new(@model, view)
+    view.inputs = ["b", "1", "z", "a", "2", "hoasdlfasd"]
+
+    first = controller.request_column @model.size
+    second = controller.request_column @model.size
+    assert_equal(first, 1)
+    assert_equal(second, 2)
   end
 
   def test_play_ai_turn; end
