@@ -1,8 +1,6 @@
 Layout/EndOfLine:
    Enabled: False
 
-Style/Documentation:
-   Enabled: False
 
 Metrics/ClassLength:
    Max: 250

@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Clase que modela funciones basicas para poder testear
 class BaseController
   # funcion que envuelve IO para hacer un stub. recibe una variable
   # para poder mapear el output. por ejemplo, si se busca que en mode

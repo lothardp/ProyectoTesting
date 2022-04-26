@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Clase que modela el tablero del juego
 class BoardModel
   attr_accessor :size, :positions, :n_ships, :board1, :board2, :p1_ships, :p2_ships
 

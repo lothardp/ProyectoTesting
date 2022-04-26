@@ -2,8 +2,10 @@
 
 require_relative './base_controller'
 
+# Clase que comienza el juego y setea la dificultad y el modo
 class WelcomeController < BaseController
   def initialize(difficulty)
+    super()
     @difficulty = difficulty
   end
 

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Clase que modela un barco
 class Ship
   attr_accessor :size, :is_vertical, :positions, :sunk, :neighbors
 
