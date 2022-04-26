@@ -10,6 +10,7 @@ class BoardView
     @letters = %w[A B C D E F G H I J K L]
   end
 
+  # :nocov:
   def print_one_side(player)
     # $stdout.clear_screen
     board_to_print = player.zero? ? @model.board1 : @model.board2
@@ -17,7 +18,9 @@ class BoardView
     puts "#{player_name}'s board: "
     print_board board_to_print, false
   end
+  # :nocov:
 
+  # :nocov:
   def show_board_for(player)
     # $stdout.clear_screen
     player_board = player.zero? ? @model.board1 : @model.board2
@@ -27,7 +30,9 @@ class BoardView
     puts '   Your board'
     print_board player_board, false
   end
+  # :nocov:
 
+  # :nocov:
   def print_board(board, hide_ships = false) # rubocop:disable Style/OptionalBooleanParameter
     len = board.length
     print '   '
@@ -46,4 +51,5 @@ class BoardView
     end
     $stdout.flush
   end
+  # :nocov:
 end
