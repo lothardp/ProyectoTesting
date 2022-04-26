@@ -57,7 +57,6 @@ class GameController < BaseController
   # :nocov:
   
   # falta linea del else.
-  # :nocov:
   def place_ships(player) # rubocop:disable Metrics
     if player == 2 # AI
       place_ai_ships
@@ -81,7 +80,6 @@ class GameController < BaseController
       @view.print_one_side player
     end
   end
-  # :nocov:
   
   def place_ai_ships
     ship_counter = 0
@@ -89,8 +87,8 @@ class GameController < BaseController
       print 'AI is setting its Ships'
       ship_size = @ship_size # Podria ser al azar en vola
       orientation = get_rand(2, 1)
-      row = get_rand(1..@model.size, 4)
-      col = get_rand(1..@model.size, 5)
+      row = get_rand(1..@model.size, 10)
+      col = get_rand(1..@model.size, 20)
       next unless @model.valid_position(ship_size, row, col, orientation == 1, 2)
 
       ship = Ship.new(ship_size, row, col, orientation == 1)
@@ -133,7 +131,7 @@ class GameController < BaseController
   
   def play_ai_turn
     print 'Press enter for AI to play'
-    $stdin.gets
+    stdin_get_string(-1)
     row, col = get_shot_from 2
     hit, sunk_ship = handle_shot_from 1, row, col
     @model.shot_from 1, row, col
@@ -157,8 +155,8 @@ class GameController < BaseController
     first = true
     until @model.valid_shot(row, col, player)
       print 'Invalid shot, already hit that box' if !first && player != 2
-      row = player == 2 ? get_rand(1..@model.size, 4) : request_row(@model.size)
-      col = player == 2 ? get_rand(1..@model.size, 5) : request_column(@model.size)
+      row = player == 2 ? get_rand(1..@model.size, 10) : request_row(@model.size)
+      col = player == 2 ? get_rand(1..@model.size, 20) : request_column(@model.size)
       first = false
     end
     [row, col]
