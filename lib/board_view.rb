@@ -14,7 +14,9 @@ class BoardView
     # $stdout.clear_screen
     board_to_print = player.zero? ? @model.board1 : @model.board2
     player_name = player.zero? ? 'Player 1' : 'Player 2'
-    puts "#{player_name}'s board: "
+    player_icon = player.zero? ? '1️⃣ ' : '2️⃣ '
+    puts "\n____________________________ "
+    puts "\n #{player_icon} #{player_name}'s board: \n\n"
     print_board board_to_print, false
   end
 
@@ -22,9 +24,9 @@ class BoardView
     # $stdout.clear_screen
     player_board = player.zero? ? @model.board1 : @model.board2
     rival_board = player.zero? ? @model.board2 : @model.board1
-    puts '   Oponent board'
+    puts "\n  🎯 OPONENT BOARD "
     print_board rival_board, true
-    puts '   Your board'
+    puts "\n  👤 YOUR BOARD "
     print_board player_board, false
   end
 
