@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
-class WelcomeController
+require_relative './base_controller'
+
+# Clase que comienza el juego y setea la dificultad y el modo
+class WelcomeController < BaseController
   def initialize(difficulty)
+    super()
     @difficulty = difficulty
   end
 
@@ -19,12 +23,5 @@ class WelcomeController
       diff = stdin_get_integer 2
     end
     [mode, @difficulty[diff][0], @difficulty[diff][1]]
-  end
-
-  # funcion que envuelve IO para hacer un stub. recibe una variable
-  # para poder mapear el output. por ejemplo, si se busca que en mode
-  # retorne 1 y en diff retorne 3, se hace un hash {1: 1, 2: 3}.
-  def stdin_get_integer(_var)
-    $stdin.gets.to_i
   end
 end

@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 require_relative './ship'
+require_relative './base_controller'
 
+# Clase que modela la logica del juego
 class GameController
   attr_accessor :model
 
@@ -10,45 +12,46 @@ class GameController
     @view = board_view
     @turn = 0
     @winner = -1
+    @ship_size = 3
     @row_to_int = { 'A' => 1, 'B' => 2, 'C' => 3, 'D' => 4, 'E' => 5, 'F' => 6,
                     'G' => 7, 'H' => 8, 'I' => 9, 'J' => 10, 'K' => 11, 'L' => 12 }
   end
 
+  # fully tested
   def request_orientation
     orientation = 0
-    while orientation != 1 && orientation != 2
-      puts "\n SELECT ORIENTATION: \n 1) ⬆️  Vertical\n 2) ⬅️  Horizonal"
-      orientation = $stdin.gets.to_i
-    end
+    orientation = @view.ask_for_orientation while orientation != 1 && orientation != 2
     orientation
   end
 
+  # fully tested
   def request_row(board_size)
     row = 0
     while (row < 1) || (row > board_size)
-      puts "\n 🔠 SELECT A ROW: "
-      r = $stdin.gets.to_s.chomp.upcase
+      r = @view.ask_for_row
       @row_to_int[r].nil? ? next : row = @row_to_int[r]
     end
     row
   end
 
+  # fully tested
   def request_column(board_size)
     col = 0
-    while col < 1 || col > board_size
-      puts "\n 🔢 SELECT A COLUMN: "
-      col = $stdin.gets.to_i
-    end
+    col = @view.ask_for_column while col < 1 || col > board_size
     col
   end
 
+  # funcion no se testea, ya que se testean las funciones por separado.
+  # :nocov:
   def start_game(oponent)
     puts "\n READY? 👀 \n GO! \n\n"
     place_ships 0
     place_ships oponent
     play oponent
   end
+  # :nocov:
 
+  # falta linea del else.
   def place_ships(player) # rubocop:disable Metrics
     if player == 2 # AI
       place_ai_ships
@@ -57,8 +60,8 @@ class GameController
     ship_counter = 0
     @view.print_one_side player
     while ship_counter < @model.n_ships
-      ship_size = 3 # Podria ser al azar en vola
-      puts "\n SET A SHIP OF SIZE #{ship_size} 🚢 🆕 \n"
+      ship_size = @ship_size # Podria ser al azar en vola
+      @view.show_set_ship_of_size ship_size
       orientation = request_orientation
       row = request_row(@model.size)
       col = request_column(@model.size)
@@ -67,7 +70,7 @@ class GameController
         @model.add_ship player, ship
         ship_counter += 1
       else
-        puts "\n ❌ Invalid position, try another"
+        @view.show_invalid_ship_position
       end
       @view.print_one_side player
     end
@@ -76,8 +79,8 @@ class GameController
   def place_ai_ships
     ship_counter = 0
     while ship_counter < @model.n_ships
-      puts '\n  🤖 AI is setting its Ships...'
-      ship_size = 3 # Podria ser al azar en vola
+      @view.show_ai_setting_ships
+      ship_size = @ship_size # Podria ser al azar en vola
       orientation = rand(2)
       row = rand(1..@model.size)
       col = rand(1..@model.size)
@@ -103,41 +106,40 @@ class GameController
       return
     end
     @view.show_board_for player
-    puts "\n 🔫 CHOOSE YOUR SHOOT "
+    @view.show_choose_your_shot
     row, col = get_shot_from player
     hit, sunk_ship = handle_shot_from player, row, col
     @model.shot_from player, row, col
     @model.update_sink_by player, sunk_ship if sunk_ship
     @view.show_board_for player
     if hit
-      puts "\n 💥 IT'S A HIT! 💥 "
-      puts "\n 🎖  YOU SUNK A RIVAL SHIP! 🎖 " if sunk_ship
+      @view.show_hit
+      @view.show_sink if sunk_ship
       return if win?
 
-      puts "\t You can shoot again"
+      @view.show_shoot_again
       play_turn player
     else
-      puts "\n IT'S A MISS 😪"
+      @view.show_miss
     end
   end
 
   def play_ai_turn
-    puts "\n 🤖 Press [ENTER] for AI to play"
-    $stdin.gets
+    @view.ask_for_press_for_ai_play
     row, col = get_shot_from 2
     hit, sunk_ship = handle_shot_from 1, row, col
     @model.shot_from 1, row, col
     @model.update_sink_by 1, sunk_ship if sunk_ship
     @view.show_board_for 0
     if hit
-      puts "\n 💥 IT'S A HIT from the AI! 💥 "
-      puts "\n 🎖  The AI SUNK ONE OF YOUR SHIPS! 🎖 " if sunk_ship
+      @view.show_ai_hit
+      @view.show_ai_sink if sunk_ship
       return if win?
 
-      puts "\n The AI can shoot again"
+      @view.show_ai_shoot_again
       play_turn 2
     else
-      puts "\n IT'S A MISS 😪"
+      @view.show_miss
     end
   end
 
@@ -146,7 +148,7 @@ class GameController
     col = 0
     first = true
     until @model.valid_shot(row, col, player)
-      puts "\n ❌ Invalid shot, already hit that box." if !first && player != 2
+      @view.show_invalid_shot if !first && player != 2
       row = player == 2 ? rand(1..@model.size) : request_row(@model.size)
       col = player == 2 ? rand(1..@model.size) : request_column(@model.size)
       first = false
@@ -186,6 +188,6 @@ class GameController
 
   def finish_game
     winner_name = @winner.zero? ? 'Player 1' : 'Player 2'
-    puts "\n GAME OVER!\n 🎉 The winner is #{winner_name} 🎉 \n "
+    @view.show_game_over winner_name
   end
 end

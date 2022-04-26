@@ -2,12 +2,86 @@
 
 require 'io/console'
 
+# :nocov:
+# Clase que modela la vista del juego, se comunica con la terminal (input/output)
 class BoardView
   attr_accessor :letters
 
   def initialize(model)
     @model = model
     @letters = %w[A B C D E F G H I J K L]
+  end
+
+  def ask_for_orientation
+    puts "\n SELECT ORIENTATION: \n 1) ⬆️  Vertical\n 2) ⬅️  Horizonal"
+    $stdin.gets.to_i
+  end
+
+  def ask_for_row
+    puts "\n 🔠 SELECT A ROW: "
+    $stdin.gets.to_s.chomp.upcase
+  end
+
+  def ask_for_column
+    puts "\n 🔢 SELECT A COLUMN: "
+    $stdin.gets.to_i
+  end
+
+  def show_set_ship_of_size(ship_size)
+    puts "\n SET A SHIP OF SIZE #{ship_size} 🚢 🆕 \n"
+  end
+
+  def show_invalid_ship_position
+    puts "\n ❌ Invalid position, try another"
+  end
+
+  def show_ai_setting_ships
+    puts '\n  🤖 AI is setting its Ships...'
+  end
+
+  def show_invalid_shot
+    puts "\n ❌ Invalid shot, already hit that box."
+  end
+
+  def show_choose_your_shot
+    puts "\n 🔫 CHOOSE YOUR SHOOT "
+  end
+
+  def show_hit
+    puts "\n 💥 IT'S A HIT! 💥 "
+  end
+
+  def show_sink
+    puts "\n 🎖  YOU SUNK A RIVAL SHIP! 🎖 "
+  end
+
+  def show_shoot_again
+    puts 'You can shoot again'
+  end
+
+  def show_miss
+    puts "\n IT'S A MISS 😪"
+  end
+
+  def ask_for_press_for_ai_play
+    puts "\n 🤖 Press [ENTER] for AI to play"
+    $stdin.gets
+  end
+
+  def show_ai_hit
+    puts "\n 💥 IT'S A HIT from the AI! 💥 "
+  end
+
+  def show_ai_sink
+    puts "\n 🎖  The AI SUNK ONE OF YOUR SHIPS! 🎖 "
+  end
+
+  def show_ai_shoot_again
+    puts 'The AI can shoot again'
+  end
+
+  def show_game_over(winner_name)
+    puts "\n GAME OVER!\n 🎉 The winner is #{winner_name} 🎉 \n "
   end
 
   def print_one_side(player)
@@ -49,3 +123,4 @@ class BoardView
     $stdout.flush
   end
 end
+# :nocov:
