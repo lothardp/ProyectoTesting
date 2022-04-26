@@ -44,6 +44,7 @@ class GameController
   # funcion no se testea, ya que se testean las funciones por separado.
   # :nocov:
   def start_game(oponent)
+    puts "\n READY? 👀 \n GO! \n\n"
     place_ships 0
     place_ships oponent
     play oponent
