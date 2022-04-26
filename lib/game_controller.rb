@@ -51,7 +51,6 @@ class GameController
   # :nocov:
 
   # falta linea del else.
-  # :nocov:
   def place_ships(player) # rubocop:disable Metrics
     if player == 2 # AI
       place_ai_ships
@@ -75,7 +74,6 @@ class GameController
       @view.print_one_side player
     end
   end
-  # :nocov:
 
   def place_ai_ships
     ship_counter = 0
