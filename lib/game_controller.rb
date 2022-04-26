@@ -4,11 +4,10 @@ require_relative './ship'
 require_relative './base_controller'
 
 # Clase que modela la logica del juego
-class GameController < BaseController
+class GameController
   attr_accessor :model
 
   def initialize(board_model, board_view)
-    super()
     @model = board_model
     @view = board_view
     @turn = 0
@@ -83,9 +82,9 @@ class GameController < BaseController
     while ship_counter < @model.n_ships
       @view.show_ai_setting_ships
       ship_size = @ship_size # Podria ser al azar en vola
-      orientation = get_rand(2, 1)
-      row = get_rand(1..@model.size, 4)
-      col = get_rand(1..@model.size, 5)
+      orientation = rand(2)
+      row = rand(1..@model.size)
+      col = rand(1..@model.size)
       next unless @model.valid_position(ship_size, row, col, orientation == 1, 2)
 
       ship = Ship.new(ship_size, row, col, orientation == 1)
@@ -151,8 +150,8 @@ class GameController < BaseController
     first = true
     until @model.valid_shot(row, col, player)
       @view.show_invalid_shot if !first && player != 2
-      row = player == 2 ? get_rand(1..@model.size, 4) : request_row(@model.size)
-      col = player == 2 ? get_rand(1..@model.size, 5) : request_column(@model.size)
+      row = player == 2 ? rand(1..@model.size) : request_row(@model.size)
+      col = player == 2 ? rand(1..@model.size) : request_column(@model.size)
       first = false
     end
     [row, col]
